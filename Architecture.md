@@ -2,11 +2,11 @@
 
 **Status:** proposed. Items marked **(Proposed)** need the user's approval. Where the repository already has an established convention, the repository wins. If this file disagrees with `AGENTS.md`, `AGENTS.md` wins and this file must be corrected.
 
-**Read with:** `AGENTS.md` (root rules), `ddm-pmms-backend.md` (final backend decisions), `api-contracts.md`, `design-system.md`, `frontend-guidelines.md`, `feature-specifications.md`, `development-workflow.md`.
+**Read with:** `AGENTS.md` (root rules), `ddm-pmms-backend.md` (final backend decisions), `api-contracts.md`, `Design-system.md`, `frontend-guidelines.md`, `feature-specification.md`, `development-workflow.md`.
 
 ## 1. Purpose and scope
 
-This file defines how the DDM-PMMS frontend is structured: layers, module boundaries, state, authentication, authorization in the UI, errors, files, and routing. It does not define visuals (see `design-system.md`) or code style (see `frontend-guidelines.md`).
+This file defines how the DDM-PMMS frontend is structured: layers, module boundaries, state, authentication, authorization in the UI, errors, files, and routing. It does not define visuals (see `Design-system.md`) or code style (see `frontend-guidelines.md`).
 
 The frontend is a **thin client**. The backend decides who may do what and computes every business value. The frontend presents, collects input, and guides the user through the allowed actions.
 
@@ -44,7 +44,7 @@ flowchart TD
 - `features/ddm` and `features/pmms` must not import from each other.
 - `shared` imports nothing from `features` or `app`.
 
-**Project documents.** The backend serves project supporting documents under `/pmms/...` and DDM documents under `/ddm/...`, and PMMS never calls DDM endpoints. The frontend follows this. Presentational pieces that both modules need (document table, version list, request-download dialog, upload form) live in `shared/components/documents` and receive their data and actions as props. Each module wires them to its own endpoints.
+**Project documents.** The backend currently serves DDM documents under `/ddm/...` but has no PMMS project-document or document-category routes. Keep the project-documents feature blocked until those routes and contracts exist. Presentational pieces that both modules may need (document table, version list, request-download dialog, upload form) can live in `shared/components/documents` and receive data and actions as props; do not wire PMMS document API calls to DDM endpoints.
 
 ## 4. Folder structure (Proposed)
 
@@ -131,7 +131,7 @@ Consequences:
 - **Actions** are hidden when the user lacks the permission, and the backend still decides. A `403` or `404` from the API is handled gracefully even for visible actions (the data may have changed).
 - **Project ownership is not a permission.** A PE sees only his own projects because the API returns only those. Do not filter client-side, and do not assume the list is complete or shared.
 - **Download ability** comes from the API's `can_download` flag, never from a role check.
-- Admin and Super Admin cannot edit project data. They only see the administer actions (terminate, reopen, reassign, correct planned dates, delete, restore).
+- Admin and Super Admin cannot edit project data. Registered administer actions are terminate, reopen, reassign, delete, and restore. Reassignment needs an active-PE list route that is not available; post-start date correction has no registered route.
 
 ## 8. Error handling architecture
 
@@ -162,17 +162,17 @@ Use an error boundary per route so one failing screen does not blank the app. Us
 | Route | Screen | Required permission |
 | --- | --- | --- |
 | `/login` | Login | Public |
-| `/account/password` | Change own password | Signed in |
+| `/account/password` | Change own password (blocked pending backend route) | Signed in |
 | `/pmms/dashboard` | Dashboard and watchlist | `pmms.dashboard.view` |
-| `/pmms/projects` | Project list | `pmms.projects.view-all` or `view-own` |
+| `/pmms/projects` | Project list | `pmms.projects.view-all` or `pmms.projects.view-own` |
 | `/pmms/projects/new` | Register project | `pmms.projects.create` |
-| `/pmms/projects/:id` | Project detail with tabs (overview, updates, history, documents) | view-all or owner |
+| `/pmms/projects/:id` | Project detail with tabs (overview, updates, history; documents blocked) | `pmms.projects.view-all` or `pmms.projects.view-own`; API enforces project scope and returns `404` when out of scope |
 | `/pmms/reports` | Project reports and export | `pmms.reports.view` |
 | `/ddm/documents` | Document list and search | `ddm.documents.view` |
 | `/ddm/documents/:id` | Document detail, versions | `ddm.documents.view` |
 | `/ddm/download-requests` | My requests, approval queue | request or approve permission |
 | `/ddm/categories` | Category management | `ddm.categories.manage` |
-| `/ddm/reports` | DDM reports | `ddm.reports.view` |
+| `/ddm/reports` | DDM reports (blocked pending backend routes) | `ddm.reports.view` |
 | `/admin/users` | User administration | `users.manage` |
 | `/admin/roles` | Roles and permissions | `roles.manage` |
 | `/admin/audit-logs` | Audit trail | `audit.view` |
@@ -184,7 +184,7 @@ Routes are lazy-loaded per module so a user only downloads the code for areas th
 - Server-side pagination, sorting, and filtering everywhere. Never load a whole collection and filter in the browser.
 - Debounce search inputs (about 300 ms) and cancel superseded requests.
 - Lazy-load routes and the charting library.
-- Meet WCAG 2.1 AA. Details are in `design-system.md`.
+- Meet WCAG 2.1 AA. Details are in `Design-system.md`.
 
 ## 12. Testing architecture
 
@@ -192,4 +192,4 @@ Use the test tooling already installed. If none exists, propose Vitest, React Te
 
 ## 13. Open architectural decisions
 
-These are listed in `development-workflow.md` section 11 and must be answered before the related work starts: UI library, test stack, API type generation, folder structure if the repo has none, currency and date display, and responsive scope.
+The UI library is decided: use the installed shadcn/ui and Tailwind CSS setup. Remaining decisions are listed in `development-workflow.md` section 11 and must be answered before related work starts.

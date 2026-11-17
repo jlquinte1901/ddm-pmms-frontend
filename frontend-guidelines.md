@@ -2,7 +2,7 @@
 
 **Status:** proposed coding standard. The repository's existing ESLint, Prettier, TypeScript, and naming conventions take precedence. Where they are silent, follow this file.
 
-**Read with:** `AGENTS.md` (especially section 13, Frontend Rules), `architecture.md`, `design-system.md`, `api-contracts.md`.
+**Read with:** `AGENTS.md` (especially section 13, Frontend Rules), `Architecture.md`, `Design-system.md`, `api-contracts.md`.
 
 ## 1. Hard rules (never break)
 
@@ -53,10 +53,10 @@ These come from `AGENTS.md` and the final backend decisions. A change that break
 
 ## 5. API layer
 
-- One configured Axios instance in `shared/api`. It sets the base URL `/api/v1`, attaches the Bearer token, and normalizes errors into `ApiError` (see `architecture.md` section 8).
+- One configured Axios instance in `shared/api`. It sets the base URL `/api/v1`, attaches the Bearer token, and normalizes errors into `ApiError` (see `Architecture.md` section 8).
 - Components and pages never import Axios. They use feature hooks that call typed endpoint functions.
 - Endpoint functions return typed data, validate nothing about business rules, and contain no UI logic.
-- Query keys come from a per-feature key factory. After a mutation, invalidate the keys listed in `architecture.md` section 5.
+- Query keys come from a per-feature key factory. After a mutation, invalidate the keys listed in `Architecture.md` section 5.
 - Send filters exactly as the API documents them. Do not send empty or undefined filter values.
 - Do not retry non-idempotent requests automatically. Retries are for reads only.
 
@@ -130,7 +130,7 @@ Rules: query by role and accessible name, not by test IDs or class names; mock a
 
 ## 12. Accessibility
 
-Follow `design-system.md` section 9. In code review check: keyboard use, focus handling in dialogs, labels on every input, accessible names on icon buttons, table semantics, and that no state is conveyed by color alone.
+Follow `Design-system.md` section 9. In code review check: keyboard use, focus handling in dialogs, labels on every input, accessible names on icon buttons, table semantics, and that no state is conveyed by color alone.
 
 ## 13. Comments and documentation
 

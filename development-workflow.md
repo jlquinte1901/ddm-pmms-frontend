@@ -2,7 +2,7 @@
 
 **Status:** proposed working agreement for the AI engineering assistant and the human team. It extends `AGENTS.md` section 14 and section 15; if they differ, `AGENTS.md` wins.
 
-**Read with:** `architecture.md`, `frontend-guidelines.md`, `feature-specifications.md`, `api-contracts.md`, `design-system.md`.
+**Read with:** `Architecture.md`, `frontend-guidelines.md`, `feature-specification.md`, `api-contracts.md`, `Design-system.md`.
 
 ## 1. Principles
 
@@ -18,9 +18,11 @@
 1. Read `AGENTS.md` and the frontend docs listed above.
 2. Read `ddm-pmms-backend.md` section 16 (approved decisions).
 3. Inspect the repository: `package.json` (installed versions and scripts), `tsconfig`, lint and format config, folder structure, routes, existing components, hooks, state, and tests. Check installed skills.
-4. Identify the module (Shared Core, DDM, or PMMS) and which feature in `feature-specifications.md` is affected.
-5. Confirm the endpoints exist and match `api-contracts.md`. If not, stop and raise it (section 8).
-6. Verify package versions before relying on any API. Do not assume a version.
+4. Identify the module (Shared Core, DDM, or PMMS) and which feature in `feature-specification.md` is affected.
+5. Verify the exact method, URI, middleware, and route name in the backend's `routes/api.php`.
+6. Verify the request rules, controller behavior, and Resource/response shape for every endpoint in the slice. Route existence alone does not confirm the contract.
+7. Compare backend behavior with `api-contracts.md`. If a needed route is not registered, do not call it or invent a fallback; record it as blocked in section 10 and tell the user.
+8. Verify package versions before relying on any API. Do not assume a version.
 
 ## 2a. Response format for a request
 
@@ -56,18 +58,19 @@ Do not mix unrelated slices. Do not start the next slice until the current one p
 A slice may start when:
 
 - The user approved the stage.
-- The backend endpoints exist and match the contract (or the slice uses documented mocks and says so).
+- Every required backend endpoint is registered and its request fields, response shape, permission middleware, and ownership checks have been checked against backend code (or the slice uses explicitly approved, documented mocks).
 - The decisions it depends on are answered (section 11).
-- Acceptance criteria are in `feature-specifications.md`.
+- Acceptance criteria are in `feature-specification.md`.
+- The request and response names in the UI match the current backend Form Requests and API Resources, not an earlier design draft.
 
 ## 5. Definition of done
 
-- [ ] Behavior matches `feature-specifications.md` and `AGENTS.md` section 13
+- [ ] Behavior matches `feature-specification.md` and `AGENTS.md` section 13
 - [ ] No ownership or identity fields sent, no business values recomputed
 - [ ] All data views have loading, empty, error, forbidden or not found, and success states
 - [ ] Permissions gated in the UI, and `403` and `404` handled
 - [ ] Forms validate and map server `422` errors to fields
-- [ ] Accessibility checklist in `design-system.md` section 9 passed
+- [ ] Accessibility checklist in `Design-system.md` section 9 passed
 - [ ] Tests written and passing for the behavior (permissions, lifecycle rules, error mapping, download flow where relevant)
 - [ ] Lint, type-check, and tests defined in `package.json` pass
 - [ ] No `console.log`, secrets, tokens, or dead code left behind
@@ -90,15 +93,15 @@ If a script does not exist, say so. Do not invent success. If a check cannot be 
 
 - Do not install, upgrade, or replace dependencies without approval.
 - Do not create new base folders or architectural layers without approval.
-- Follow the existing structure. `architecture.md` section 4 applies only if the repository has no established structure.
+- Follow the existing structure. `Architecture.md` section 4 applies only if the repository has no established structure.
 
 ## 8. Handling contract gaps and conflicts
 
-When the UI needs data or an action the contract lacks, or the API behaves differently from the contract:
+When the UI needs data or an action the current backend does not register, or the API behaves differently from the contract:
 
 1. Stop work on that part. Do not invent endpoints, fields, or permissions.
 2. Add an entry under "Open contract questions" (section 10) with what is needed and why.
-3. Tell the user. Propose an option, as `api-contracts.md` does for the four known gaps.
+3. Tell the user. Keep the affected UI slice blocked unless the user approves an explicitly marked mock or the backend implements the missing contract.
 4. Continue with parts that are not blocked.
 
 When something conflicts with an approved decision, say so and ask before proceeding.
@@ -109,36 +112,36 @@ When something conflicts with an approved decision, say so and ask before procee
 - Proposed items that the user approves are changed from "(Proposed)" to final, with the date.
 - If `AGENTS.md` and these docs disagree, fix these docs, and tell the user if `AGENTS.md` itself looks wrong.
 
-## 10. Open contract questions (maintain here)
+## 10. Open contract questions and backend route gaps (maintain here)
 
 | # | Question | Status |
 | --- | --- | --- |
-| 1 | Endpoint for listing active PEs for Admin (reassign dialog, assigned-PE filter). Proposal: `GET /pmms/engineers` | Open |
-| 2 | Exact paths for the administer actions | Open, confirm |
-| 3 | Category list scoped to `pmms` for project documents. Proposal: `GET /pmms/document-categories` | Open |
-| 4 | Filter options for fund source, region, LGU, contractor. Proposal: `GET /pmms/filter-options` | Open, optional |
-| 5 | Final field names of API Resources (confirm against the real backend) | Open |
-| 6 | OpenAPI document available for generating types? | Open |
+| 1 | Active Project Engineer list for Admin (reassign dialog and assigned-PE filter); no `/pmms/engineers` route exists | Blocked; backend endpoint/permission needed, or explicitly approved alternate |
+| 2 | PMMS supporting-document list, upload, download, and scoped document categories; no project-document routes exist | Blocked; backend contract and routes needed |
+| 3 | Correct planned dates after project start; no administer date-correction route exists | Blocked; backend contract and route needed |
+| 4 | Change password; no `/auth/change-password` route exists | Blocked; backend contract and route needed |
+| 5 | DDM reports and CSV export; no `/ddm/reports/*` routes exist | Blocked; backend contract and routes needed |
+| 6 | Cancel own pending download request; no cancel route exists | Blocked; backend contract and route needed |
+| 7 | Download a specific historic document version; only current-version download is routed | Blocked; backend contract and route needed |
+| 8 | Contract number uniqueness: current project create request requires a unique value, but the approved business rule says it is nullable and not unique | Backend/product decision conflict; resolve before finalizing registration validation |
+| 9 | Runtime response-envelope and error-format verification against API tests | Inspecting Resources establishes fields, but verify serialized envelopes and error responses before wiring shared API handling |
 
-## 11. Decisions the user must make (frontend)
+## 11. Remaining decisions (frontend)
 
-None of these is decided. Until answered, the assistant follows what is already installed in the repository, and otherwise asks.
+The UI library decision is approved: use the existing shadcn/ui and Tailwind CSS setup. The following items remain open. Until answered, follow existing repository conventions and do not install dependencies without approval.
 
 | # | Decision | Recommendation |
 | --- | --- | --- |
-| 1 | UI library | shadcn/ui with Tailwind CSS, unless one is already installed |
-| 2 | Frontend test stack | Vitest, React Testing Library, MSW, unless something is already installed |
-| 3 | API type source | Hand-written types from `api-contracts.md` now, switch to OpenAPI generation if the backend publishes a spec |
-| 4 | Folder structure | `architecture.md` section 4, unless the repo already has one |
-| 5 | Currency display | Philippine peso with two decimals |
-| 6 | Date display format | "Mar 5, 2026" |
-| 7 | Responsive scope | Desktop first, usable on tablet, no phone layout |
-| 8 | Language | English only |
-| 9 | Branding (colors, logo, font) | Colors taken from the Figma mockups (`design-system.md` section 3); approve the contrast adjustments (darker blue and green for small white text, dark text on orange). Logo and font still open |
-| 10 | Dark mode | Not now |
-| 11 | Unsaved-changes warning and draft keeping | Warn on leave, no draft storage |
-| 12 | Approve the four API gaps' proposals | Yes, so Admin screens can be built |
-
+| 1 | Frontend test stack | Approved and installed: Vitest, React Testing Library, MSW |
+| 2 | API type source | Hand-written types from `api-contracts.md` now, switch to OpenAPI generation if the backend publishes a spec |
+| 3 | Folder structure | `Architecture.md` section 4, unless the repo already has one |
+| 4 | Currency display | Philippine peso with two decimals |
+| 5 | Date display format | "Mar 5, 2026" |
+| 6 | Responsive scope | Desktop first, usable on tablet, no phone layout |
+| 7 | Language | English only |
+| 8 | Branding (colors, logo, font) | Colors taken from the Figma mockups (`Design-system.md` section 3); approve the contrast adjustments (darker blue and green for small white text, dark text on orange). Logo and font still open |
+| 9 | Dark mode | Not now |
+| 10 | Unsaved-changes warning and draft keeping | Warn on leave, no draft storage |
 Decision 20 (token in `sessionStorage`) is already final and is not on this list.
 
 ## 12. Working with the backend work in progress
@@ -156,7 +159,7 @@ Decision 20 (token in `sessionStorage`) is already final and is not on this list
 
 ## 14. Prompts that work well with the assistant
 
-Give the assistant: the feature ID from `feature-specifications.md` (for example "C6 pause and resume"), the stage approval, and any decisions from section 11 that apply. Example:
+Give the assistant: the feature ID from `feature-specification.md` (for example "C6 pause and resume"), the stage approval, and any decisions from section 11 that apply. Example:
 
 > Implement C5 Report progress for PE. Backend endpoint is ready. Use the existing UI library. Follow the docs. Report which checks you ran.
 

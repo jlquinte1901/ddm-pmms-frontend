@@ -2,7 +2,7 @@
 
 **Status:** proposed. Items marked **(Proposed)** need approval. If the repository already has a UI library, theme, or tokens, follow them and adapt this file instead of overriding them.
 
-**Read with:** `architecture.md`, `frontend-guidelines.md`, `AGENTS.md` section 13.
+**Read with:** `Architecture.md`, `frontend-guidelines.md`, `AGENTS.md` section 13.
 
 ## 1. Design intent
 
@@ -18,7 +18,7 @@ DDM-PMMS is an internal government work tool used for hours at a time by Admins,
 
 | Topic | Proposal | Reason |
 | --- | --- | --- |
-| UI library | **shadcn/ui with Tailwind CSS** | Pairs naturally with TanStack Table for dense data views, tokens are CSS variables, and components are owned in the repo, so there is no version lock-in. MUI is an acceptable alternative. **Decision needed** (development-workflow section 11). Follow whichever is already installed. |
+| UI library | **shadcn/ui with Tailwind CSS** | Approved 2026-11-04 and already installed in the repository. Extend the existing components and tokens; do not replace the library. |
 | Icons | One icon set, used consistently (for example Lucide with shadcn/ui) | Status badges use icon plus text. |
 | Density | Compact tables, comfortable forms | Office use with long lists. |
 | Visual direction | **Follow the Figma mockups** (login, Superadmin dashboard, Projects, User Management, Reports): blue app bar, white tab row, blue table headers, bright status pills, rounded bordered cards. Colors are in section 3. | The user supplied the mockups and asked for this palette (2026-11-05). |
@@ -139,14 +139,14 @@ Primitives come from the chosen library. The following project components are sp
 | `DataTable` | TanStack Table. Server-side pagination, sort, and filter. Sticky header. Row actions in a trailing menu. Always has loading skeleton, empty state, and error state. Money right-aligned. |
 | `FilterBar` | Drives URL search params. Shows active filters as removable chips. "Clear all" action. |
 | `IndicatorBadge`, `StatusBadge`, `AccessLevelBadge` | As in sections 4 and 5. One implementation each. |
-| `ReasonDialog` | A dialog with a required reason field (minimum 10 characters where the backend requires it), a clear title naming the action, and a primary button with the action name. Used for pause, resume, terminate, reopen, reassign, correct dates, delete, restore, and archive with reason. |
+| `ReasonDialog` | A dialog with a required reason field (minimum 10 characters where the backend requires it), a clear title naming the action, and a primary button with the action name. Used for pause, resume, terminate, reopen, reassign, correct dates, delete, and restore. Use it for archive only if the confirmed backend contract requires a reason. |
 | `ConfirmDialog` | Used for completing a project at 100% progress and other irreversible-feeling actions. States the consequence in plain words. |
 | `FileUpload` | Drag and drop plus button. Shows allowed types and the 50 MB limit, selected file name and size, progress, and server errors. Keyboard operable. |
-| `VersionList` | Version number, uploader, date, size, change note, and per-version download (subject to the same download rules). Marks the current version. |
+| `VersionList` | Version number, uploader, date, size, and change note. Marks the current version from `latest_version_number`; historical-version downloads are not available in the current API. |
 | `HistoryTimeline` | Project history grouped by `change_set_id`. Each group shows actor, action, time, reason, and a before and after for every changed field. Read-only. |
 | `RequestDownloadDialog` | Reason field (10 to 1000 characters). Explains who will review it. |
 | `StatCard` | Dashboard counts with a label, a number, and an optional link to the filtered list. |
-| `PermissionGate` (`<Can>`) | See `architecture.md` section 7. |
+| `PermissionGate` (`<Can>`) | See `Architecture.md` section 7. |
 | `EmptyState`, `ErrorState`, `ForbiddenState`, `NotFoundState`, `Skeleton` | Consistent wording and layout for every data view. |
 | `PageHeader`, `Breadcrumbs`, `Toast` | Standard page chrome and transient feedback. |
 | Charts | ApexCharts wrappers that use the indicator tokens. Every chart is paired with the same data in a table or accessible summary. |
@@ -161,11 +161,11 @@ Primitives come from the chosen library. The following project components are sp
 - Money fields accept decimals and display with thousands separators. Dates use a date picker plus typed entry.
 - Fields the user may not edit (for example planned dates after a project has started) are shown as read-only text with a short explanation, not as silently disabled inputs.
 
-**Lifecycle actions on a project** (PE): Start, Report progress, Suspend, Postpone, Resume. Only the actions valid for the current status are offered. Resume asks for a new finish date and a remark. Reporting 100% asks for confirmation that this completes the project.
+**Lifecycle actions on a project** (PE): Start, Report progress, Suspend, Postpone, Resume. Only the actions valid for the current status are offered. Resume sends `revised_finish_date` and `remarks`. Reporting 100% asks for confirmation that this completes the project.
 
-**Administer actions** (Admin and Super Admin): Terminate, Reopen, Reassign, Correct planned dates, Delete, Restore. They live in a separate "Administer" menu, always use `ReasonDialog`, and are styled as sensitive actions.
+**Administer actions** (Admin and Super Admin): Terminate, Reopen, Reassign, Delete, Restore. They live in a separate "Administer" menu, use `ReasonDialog` where the API requires a reason, and are styled as sensitive actions. Reassignment depends on an active-PE list that is not currently routed; correcting planned dates after start is unavailable until a backend route is added.
 
-**Archive versus delete (documents).** Archive is a normal, reversible action with its own label and icon. Delete is available only to Super Admin, uses danger styling and a reason, and is described as "Delete (can be undone by Super Admin)". Never use the same icon or color for both.
+**Archive versus delete (documents).** Archive is a normal, reversible action with its own label and icon. Whether archive or restore requires a reason is not yet confirmed; follow the backend contract and do not invent a required reason. Delete is available only to Super Admin, uses danger styling and a reason, and is described as "Delete (can be undone by Super Admin)". Never use the same icon or color for both.
 
 **Tables**
 

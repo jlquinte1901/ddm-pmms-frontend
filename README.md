@@ -1,75 +1,31 @@
-# React + TypeScript + Vite
+# DDM-PMMS Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend for the Digital-Based Document Management and Project-Based Monitoring Management System (DDM-PMMS).
 
-Currently, two official plugins are available:
+## Current project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This repository currently contains a React 19, TypeScript, and Vite application with Tailwind CSS and shadcn/ui. The app is being developed in small, approved feature slices against the Laravel API.
 
-## React Compiler
+## Documentation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [Frontend engineering guide](./ddm-pmms-frontend.md) — screen inventory, shared components, forms, hooks, tests, and build phases.
+- [Frontend architecture](./Architecture.md) — module boundaries, state, authentication, permissions, errors, and routing.
+- [Design system](./Design-system.md) — design tokens, components, interaction patterns, and accessibility.
+- [Feature specifications](./feature-specification.md) — user-facing behavior and acceptance criteria.
+- [API contracts](./api-contracts.md) — frontend API types, endpoints, and open contract gaps.
+- [Frontend guidelines](./frontend-guidelines.md) — TypeScript, React, API, form, and testing conventions.
+- [Development workflow](./development-workflow.md) — readiness, implementation, and verification process.
+- [Project instructions](./AGENTS.md) — shared DDM-PMMS business rules and repository guidance.
 
-## Expanding the ESLint configuration
+The detailed guides include proposed items and unresolved questions. Confirm those before implementing any feature that depends on them; the backend API and `AGENTS.md` remain authoritative for business rules and security.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Commands
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+npm run dev
+npm run lint
+npm run build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+There is currently no test script in `package.json`. Add or install test tooling only after approval, as described in the development workflow.
