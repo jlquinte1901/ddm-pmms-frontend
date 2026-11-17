@@ -52,6 +52,8 @@ Reuse shared infrastructure where appropriate, but preserve module-specific vali
 
 The `documents` table is owned by DDM. A document with no `project_id` is a DDM document. A document with a `project_id` is a PMMS supporting document that reuses the same storage and versioning code, with PMMS ownership rules applied first. DDM routes never return project documents, and PMMS never calls DDM endpoints.
 
+This is the target module boundary, not a claim that every route is implemented. Check `api-contracts.md` for current backend route availability; PMMS project-document routes are not currently registered, so that frontend slice is blocked.
+
 Do not introduce additional architectural layers, modules, packages, or integrations without a demonstrated need and approval where required.
 
 ### 3. Digital-Based Document Management (DDM)
@@ -263,7 +265,7 @@ A PE must not gain access to another PE's projects by manipulating query paramet
 
 Use one shared filter object for the project list, dashboard, and reports, so a dashboard number can be reproduced in a report. Map `group_by` and `sort` through fixed allow-lists and never place client text into SQL.
 
-DDM reports may include document counts, category summaries, access levels, archive status, version information, activity, download request summaries, and other approved document management metrics.
+DDM reports may include document counts, category summaries, access levels, archive status, version information, activity, download request summaries, and other approved document management metrics. This is a product requirement; the current backend has no DDM report or export routes, so the frontend report slice remains blocked.
 
 Exports are CSV only unless the user approves more. Stream CSV in chunks and write an audit row for each export.
 
@@ -391,7 +393,7 @@ These are the intended technologies, not a requirement to use every listed packa
 
 The frontend consumes the REST API described in the Backend Design Document. These rules follow from the confirmed backend behavior. They do not replace repository conventions: inspect existing components, routes, hooks, and state before adding anything new.
 
-Detailed frontend guidance lives in `architecture.md`, `design-system.md`, `frontend-guidelines.md`, `feature-specifications.md`, `api-contracts.md`, and `development-workflow.md`. Read the ones relevant to the task before frontend work. If any of them disagrees with this file, this file wins and the document must be corrected. Items marked "Proposed" in those documents are not approved until the user says so.
+Detailed frontend guidance lives in `Architecture.md`, `Design-system.md`, `frontend-guidelines.md`, `feature-specification.md`, `api-contracts.md`, and `development-workflow.md`. Read the ones relevant to the task before frontend work. If any of them disagrees with this file, this file wins and the document must be corrected. Items marked "Proposed" in those documents are not approved until the user says so.
 
 1. **The backend is the source of truth for security.** Hiding or disabling controls is a convenience only. Never rely on it for permissions, ownership, or access levels.
 2. **Use the server's permissions.** Read the signed-in user's role and effective permissions from `GET /auth/me`, and use them to decide which navigation and actions to show. Do not hardcode role checks or numeric role IDs.

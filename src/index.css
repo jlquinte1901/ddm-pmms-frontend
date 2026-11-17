@@ -39,6 +39,49 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+
+    /* Brand and semantic palette from Design-system.md section 3. */
+    --color-brand: var(--brand);
+    --color-brand-strong: var(--brand-strong);
+    --color-primary-hover: var(--primary-hover);
+    --color-surface-muted: var(--surface-muted);
+    --color-border-strong: var(--border-strong);
+    --color-success: var(--success);
+    --color-info: var(--info);
+    --color-warning-bg: var(--warning-bg);
+    --color-warning-text: var(--warning-text);
+    --color-warning-border: var(--warning-border);
+
+    /* Project lifecycle status tokens. */
+    --color-status-not-started: var(--status-not-started);
+    --color-status-ongoing: var(--status-ongoing);
+    --color-status-suspended: var(--status-suspended);
+    --color-status-postponed: var(--status-postponed);
+    --color-status-completed: var(--status-completed);
+    --color-status-terminated: var(--status-terminated);
+    --color-status-warning-text: var(--status-warning-text);
+
+    /* Project monitoring indicator tokens. */
+    --color-indicator-normal-bg: var(--indicator-normal-bg);
+    --color-indicator-normal-text: var(--indicator-normal-text);
+    --color-indicator-critical-bg: var(--indicator-critical-bg);
+    --color-indicator-critical-text: var(--indicator-critical-text);
+    --color-indicator-critical-border: var(--indicator-critical-border);
+    --color-indicator-overdue-bg: var(--indicator-overdue-bg);
+    --color-indicator-overdue-text: var(--indicator-overdue-text);
+    --color-indicator-paused-bg: var(--indicator-paused-bg);
+    --color-indicator-paused-text: var(--indicator-paused-text);
+    --color-indicator-completed-bg: var(--indicator-completed-bg);
+    --color-indicator-completed-text: var(--indicator-completed-text);
+    --color-indicator-terminated-bg: var(--indicator-terminated-bg);
+    --color-indicator-terminated-text: var(--indicator-terminated-text);
+
+    /* Document access level tokens. */
+    --color-access-restricted-bg: var(--access-restricted-bg);
+    --color-access-restricted-text: var(--access-restricted-text);
+    --color-access-confidential-bg: var(--access-confidential-bg);
+    --color-access-confidential-text: var(--access-confidential-text);
+
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -49,38 +92,76 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --brand: #007fff;
+    --brand-strong: #0055b3;
+    --primary-hover: #0055b3;
+    --surface-muted: #f8f9fa;
+    --border-strong: #8a8f98;
+    --success: #2e7d12;
+    --info: #0060c7;
+    --warning-bg: #fff4cc;
+    --warning-text: #7a5200;
+    --warning-border: #f5b700;
+
+    --status-not-started: #595959;
+    --status-ongoing: #0060c7;
+    --status-suspended: #ff9500;
+    --status-postponed: #ff9500;
+    --status-completed: #2e7d12;
+    --status-terminated: #b52c2c;
+    --status-warning-text: #1e1e1e;
+
+    --indicator-normal-bg: #e6f2ff;
+    --indicator-normal-text: #0055b3;
+    --indicator-critical-bg: #fff4cc;
+    --indicator-critical-text: #7a5200;
+    --indicator-critical-border: #f5b700;
+    --indicator-overdue-bg: #fbe9e9;
+    --indicator-overdue-text: #b52c2c;
+    --indicator-paused-bg: #fff1db;
+    --indicator-paused-text: #9a5700;
+    --indicator-completed-bg: #e8f5e1;
+    --indicator-completed-text: #2a6f10;
+    --indicator-terminated-bg: #eeeeee;
+    --indicator-terminated-text: #404040;
+
+    --access-restricted-bg: #fff1db;
+    --access-restricted-text: #9a5700;
+    --access-confidential-bg: #fbe9e9;
+    --access-confidential-text: #b52c2c;
+
+    --background: #f3f4f6;
+    --foreground: #1e1e1e;
+    --card: #ffffff;
+    --card-foreground: #1e1e1e;
+    --popover: #ffffff;
+    --popover-foreground: #1e1e1e;
+    --primary: #0060c7;
+    --primary-foreground: #ffffff;
+    --secondary: #f8f9fa;
+    --secondary-foreground: #1e1e1e;
+    --muted: #f8f9fa;
+    --muted-foreground: #595959;
+    --accent: #e6f2ff;
+    --accent-foreground: #0055b3;
+    --destructive: #b52c2c;
+    --border: #d0d5db;
+    --input: #8a8f98;
+    --ring: #007fff;
+    --chart-1: #007fff;
+    --chart-2: #ff9500;
+    --chart-3: #3fa818;
+    --chart-4: #b52c2c;
+    --chart-5: #595959;
+    --radius: 0.5rem;
+    --sidebar: #ffffff;
+    --sidebar-foreground: #1e1e1e;
+    --sidebar-primary: #0060c7;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f8f9fa;
+    --sidebar-accent-foreground: #1e1e1e;
+    --sidebar-border: #d0d5db;
+    --sidebar-ring: #007fff;
 }
 
 .dark {
@@ -118,13 +199,15 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        @apply bg-background text-foreground antialiased;
     }
-  html {
-    @apply font-sans;
+
+    html {
+        @apply font-sans;
     }
 }
