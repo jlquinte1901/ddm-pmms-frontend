@@ -187,7 +187,7 @@ Endpoints are in `api-contracts.md` section 4. Names follow `frontend-guidelines
 | pmms/dashboard | `useDashboardQuery` | none | none |
 | pmms/reports | `useProjectReportQuery` | `exportProjectReport` (CSV) | filter schema |
 
-**Shared building blocks:** `apiClient` (base `/api/v1`, Bearer token, error normalizer into `ApiError`), `queryClient`, per-feature query-key factories, `useUrlFilters`, `usePermission`, `PERMISSIONS` constants, formatters (`formatMoney`, `formatDate`, `formatDateTime`, `formatBytes`, `formatDays`), enums (`ProjectStatus`, `Indicator`, `AccessLevel`, `RequestStatus`) and the types in `api-contracts.md` section 3.
+**Shared building blocks:** `apiClient` (configured by `VITE_API_BASE_URL`, normalized to include `/api/v1`, Bearer token, error normalizer into `ApiError`), `queryClient`, per-feature query-key factories, `useUrlFilters`, `usePermission`, `PERMISSIONS` constants, formatters (`formatMoney`, `formatDate`, `formatDateTime`, `formatBytes`, `formatDays`), enums (`ProjectStatus`, `Indicator`, `AccessLevel`, `RequestStatus`) and the types in `api-contracts.md` section 3.
 
 **Stores:** one only, `authStore` (token in `sessionStorage`, user and permissions re-fetched from `/auth/me`). No stores for server data.
 

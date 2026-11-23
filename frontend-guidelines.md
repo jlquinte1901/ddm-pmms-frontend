@@ -53,7 +53,7 @@ These come from `AGENTS.md` and the final backend decisions. A change that break
 
 ## 5. API layer
 
-- One configured Axios instance in `shared/api`. It sets the base URL `/api/v1`, attaches the Bearer token, and normalizes errors into `ApiError` (see `Architecture.md` section 8).
+- One configured Axios instance in `shared/api`. It reads `VITE_API_BASE_URL`, appends `/api/v1` when the configured origin/base path does not already end with it, attaches the Bearer token, and normalizes errors into `ApiError` (see `Architecture.md` section 8). Vite-exposed variables are public in the browser bundle; never put credentials, tokens, or other secrets in them.
 - Components and pages never import Axios. They use feature hooks that call typed endpoint functions.
 - Endpoint functions return typed data, validate nothing about business rules, and contain no UI logic.
 - Query keys come from a per-feature key factory. After a mutation, invalidate the keys listed in `Architecture.md` section 5.

@@ -4,9 +4,16 @@ import { authKeys } from '@/shared/auth/queryKeys'
 import { normalizeAxiosError } from './errors'
 import { queryClient } from './queryClient'
 
-export const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
-).replace(/\/+$/, '')
+const API_PATH = '/api/v1'
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL
+  ?.trim()
+  .replace(/\/+$/, '')
+
+export const API_BASE_URL = configuredApiBaseUrl
+  ? configuredApiBaseUrl.endsWith(API_PATH)
+    ? configuredApiBaseUrl
+    : `${configuredApiBaseUrl}${API_PATH}`
+  : API_PATH
 
 /**
  * The only Axios instance in the app. It attaches the Bearer token and

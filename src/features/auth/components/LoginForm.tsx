@@ -3,16 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { AlertCircle, LogIn } from 'lucide-react'
+import { AlertCircle, Eye, EyeOff, Lock, LogIn, Mail } from 'lucide-react'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ApiError, getErrorMessage } from '@/shared/api/errors'
@@ -47,6 +40,7 @@ export function LoginForm() {
   )
   const [serverError, setServerError] = useState<string | null>(null)
   const [cooldown, setCooldown] = useState(0)
+  const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -131,94 +125,121 @@ export function LoginForm() {
   const passwordError = form.formState.errors.password
 
   return (
-    <Card>
-      <CardHeader className="gap-1.5">
-        <CardTitle className="text-xl">
-          <h1>Sign in</h1>
-        </CardTitle>
-        <CardDescription>
-          Use your City Engineering Department email to continue to DDM-PMMS.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4 pb-6">
-        {sessionExpired ? (
-          <Alert>
-            <AlertCircle aria-hidden="true" />
-            <AlertTitle>Your session expired. Sign in again.</AlertTitle>
-            <Button
-              type="button"
-              variant="ghost"
-              size="xs"
-              className="justify-self-start"
-              onClick={dismissSessionExpired}
-            >
-              Dismiss
-            </Button>
-          </Alert>
-        ) : null}
+    <div className="space-y-4">
+      {sessionExpired ? (
+        <Alert>
+          <AlertCircle aria-hidden="true" />
+          <AlertTitle>Your session expired. Sign in again.</AlertTitle>
+          <Button
+            type="button"
+            variant="ghost"
+            size="xs"
+            className="justify-self-start"
+            onClick={dismissSessionExpired}
+          >
+            Dismiss
+          </Button>
+        </Alert>
+      ) : null}
 
-        {serverError ? (
-          <Alert variant="destructive">
-            <AlertCircle aria-hidden="true" />
-            <AlertTitle>{serverError}</AlertTitle>
-          </Alert>
-        ) : null}
+      {serverError ? (
+        <Alert variant="destructive">
+          <AlertCircle aria-hidden="true" />
+          <AlertTitle>{serverError}</AlertTitle>
+        </Alert>
+      ) : null}
 
-        <form noValidate onSubmit={onSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+      <form noValidate onSubmit={onSubmit} className="space-y-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="email" className="sr-only">
+            Email
+          </Label>
+          <div className="relative">
+            <Mail
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+            />
             <Input
               id="email"
               type="email"
               inputMode="email"
               autoComplete="email"
               autoFocus
+              placeholder="Enter your email"
+              className="h-10 pr-3 pl-11 text-base placeholder:text-lg lg:text-base"
               aria-invalid={emailError !== undefined}
               aria-describedby={emailError ? 'email-error' : undefined}
               {...form.register('email', {
                 onChange: () => setServerError(null),
               })}
             />
-            {emailError ? (
-              <p id="email-error" role="alert" className="text-sm text-destructive">
-                {emailError.message}
-              </p>
-            ) : null}
           </div>
+          {emailError ? (
+            <p id="email-error" role="alert" className="text-sm text-destructive">
+              {emailError.message}
+            </p>
+          ) : null}
+        </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="password" className="sr-only">
+            Password
+          </Label>
+          <div className="relative">
+            <Lock
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+            />
             <Input
               id="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
+              placeholder="Enter your password"
+              className="h-10 pr-12 pl-11 text-base placeholder:text-lg lg:text-base"
               aria-invalid={passwordError !== undefined}
               aria-describedby={passwordError ? 'password-error' : undefined}
               {...form.register('password', {
                 onChange: () => setServerError(null),
               })}
             />
-            {passwordError ? (
-              <p
-                id="password-error"
-                role="alert"
-                className="text-sm text-destructive"
-              >
-                {passwordError.message}
-              </p>
-            ) : null}
+            <button
+              type="button"
+              className="absolute top-1/2 right-1.5 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              onClick={() => setShowPassword((current) => !current)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-pressed={showPassword}
+            >
+              {showPassword ? (
+                <EyeOff aria-hidden="true" className="size-4" />
+              ) : (
+                <Eye aria-hidden="true" className="size-4" />
+              )}
+            </button>
           </div>
+          {passwordError ? (
+            <p
+              id="password-error"
+              role="alert"
+              className="text-sm text-destructive"
+            >
+              {passwordError.message}
+            </p>
+          ) : null}
+        </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            <LogIn aria-hidden="true" />
-            {loginMutation.isPending
-              ? 'Signing in\u2026'
-              : cooldown > 0
-                ? `Try again in ${cooldown}s`
-                : 'Sign in'}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        <Button
+          type="submit"
+          className="h-11 w-full"
+          disabled={isSubmitting}
+        >
+          <LogIn aria-hidden="true" />
+          {loginMutation.isPending
+            ? 'Signing in\u2026'
+            : cooldown > 0
+              ? `Try again in ${cooldown}s`
+              : 'Sign in'}
+        </Button>
+      </form>
+    </div>
   )
 }
