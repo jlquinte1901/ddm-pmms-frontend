@@ -101,3 +101,63 @@ export type Paginated<T> = {
     total: number
   }
 }
+
+export type UserSummary = {
+  id: number
+  full_name: string
+}
+
+export type ProjectCategory = {
+  id: number
+  name: string
+  is_active: boolean
+  projects_count?: number
+  created_at: string | null
+  updated_at: string | null
+}
+
+/**
+ * Mirrors App\Http\Resources\ProjectResource. Optional relation fields are
+ * only present when the endpoint eager-loads them.
+ */
+export type Project = {
+  id: number
+  project_category_id: number
+  category?: ProjectCategory | null
+  assigned_pe_id: number
+  assigned_pe?: UserSummary | null
+  created_by: number
+  creator?: UserSummary | null
+  implementation_year: number
+  project_name: string
+  contract_number: string | null
+  location: string | null
+  region: string | null
+  lgu: string | null
+  department: string | null
+  implementing_office: string | null
+  project_manager: string | null
+  fund_source: string | null
+  contract_amount: string
+  revised_amount: string | null
+  planned_start_date: string | null
+  planned_finish_date: string | null
+  revised_finish_date: string | null
+  effective_finish_date: string | null
+  actual_start_date: string | null
+  actual_finish_date: string | null
+  contractor: string | null
+  status: ProjectStatus
+  status_label: string
+  progress_percentage: number
+  paused_since: string | null
+  completed_at: string | null
+  remarks: string | null
+  indicator: Indicator
+  indicator_label: string
+  days_remaining: number | null
+  days_paused: number | null
+  created_at: string | null
+  updated_at: string | null
+  deleted_at: string | null
+}

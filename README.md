@@ -19,6 +19,12 @@ This repository currently contains a React 19, TypeScript, and Vite application 
 
 The detailed guides include proposed items and unresolved questions. Confirm those before implementing any feature that depends on them; the backend API and `AGENTS.md` remain authoritative for business rules and security.
 
+## API configuration
+
+Set `VITE_API_BASE_URL` in the local `.env` to the backend origin or API base path. The shared API client appends `/api/v1` unless it is already present. If unset, requests use `/api/v1` and the Vite development proxy forwards them to `http://localhost:8000`.
+
+Vite variables are included in browser code. Store only the API address there, never credentials, tokens, or secrets.
+
 ## Commands
 
 ```sh

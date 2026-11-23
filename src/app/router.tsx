@@ -4,6 +4,7 @@ import { RequireAuth } from '@/shared/auth/RequireAuth'
 import { RequireGuest } from '@/shared/auth/RequireGuest'
 import { RequirePermission } from '@/shared/auth/RequirePermission'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
+import { DashboardPage } from '@/features/pmms/dashboard/pages/DashboardPage'
 import { AppShell } from './layouts/AppShell'
 import { LandingRedirect } from './pages/LandingRedirect'
 import { NoAccessPage } from './pages/NoAccessPage'
@@ -53,10 +54,7 @@ export const router = createBrowserRouter([
             path: 'pmms/dashboard',
             element: (
               <RequirePermission permission={PERMISSIONS.PMMS_DASHBOARD_VIEW}>
-                <PlaceholderPage
-                  title="PMMS dashboard"
-                  description="Monitoring counts, the critical watchlist, and project summaries."
-                />
+                <DashboardPage />
               </RequirePermission>
             ),
           },
