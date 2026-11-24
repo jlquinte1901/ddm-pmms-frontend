@@ -6,7 +6,7 @@ import {
   formatProgress,
 } from '@/shared/lib/formatters'
 import type { Project } from '@/shared/types/api'
-import { getIndicatorMeta } from '../indicatorMeta'
+import { getIndicatorMeta } from '../../shared/indicatorMeta'
 
 function timeText(project: Project): string {
   if (project.indicator === 'paused' && project.days_paused !== null) {

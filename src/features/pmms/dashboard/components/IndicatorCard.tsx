@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { cn } from 'cn'
-import type { IndicatorMeta } from '../indicatorMeta'
+import type { IndicatorMeta } from '../../shared/indicatorMeta'
 
 type IndicatorCardProps = {
   meta: IndicatorMeta

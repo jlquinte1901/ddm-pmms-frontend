@@ -63,17 +63,22 @@
 
     /* Project monitoring indicator tokens. */
     --color-indicator-normal-bg: var(--indicator-normal-bg);
+    --color-indicator-normal-border: var(--indicator-normal-border);
     --color-indicator-normal-text: var(--indicator-normal-text);
     --color-indicator-critical-bg: var(--indicator-critical-bg);
     --color-indicator-critical-text: var(--indicator-critical-text);
     --color-indicator-critical-border: var(--indicator-critical-border);
     --color-indicator-overdue-bg: var(--indicator-overdue-bg);
+    --color-indicator-overdue-border: var(--indicator-overdue-border);
     --color-indicator-overdue-text: var(--indicator-overdue-text);
     --color-indicator-paused-bg: var(--indicator-paused-bg);
+    --color-indicator-paused-border: var(--indicator-paused-border);
     --color-indicator-paused-text: var(--indicator-paused-text);
     --color-indicator-completed-bg: var(--indicator-completed-bg);
+    --color-indicator-completed-border: var(--indicator-completed-border);
     --color-indicator-completed-text: var(--indicator-completed-text);
     --color-indicator-terminated-bg: var(--indicator-terminated-bg);
+    --color-indicator-terminated-border: var(--indicator-terminated-border);
     --color-indicator-terminated-text: var(--indicator-terminated-text);
 
     /* Document access level tokens. */
@@ -112,17 +117,22 @@
     --status-warning-text: #1e1e1e;
 
     --indicator-normal-bg: #e6f2ff;
+    --indicator-normal-border: #99bfe8;
     --indicator-normal-text: #0055b3;
     --indicator-critical-bg: #fff4cc;
     --indicator-critical-text: #7a5200;
     --indicator-critical-border: #f5b700;
     --indicator-overdue-bg: #fbe9e9;
+    --indicator-overdue-border: #d89a9a;
     --indicator-overdue-text: #b52c2c;
     --indicator-paused-bg: #fff1db;
+    --indicator-paused-border: #dcb785;
     --indicator-paused-text: #9a5700;
     --indicator-completed-bg: #e8f5e1;
+    --indicator-completed-border: #9fc58f;
     --indicator-completed-text: #2a6f10;
     --indicator-terminated-bg: #eeeeee;
+    --indicator-terminated-border: #b5b5b5;
     --indicator-terminated-text: #404040;
 
     --access-restricted-bg: #fff1db;
