@@ -18,7 +18,7 @@ export const INDICATOR_META: readonly IndicatorMeta[] = [
     label: 'Normal',
     description: 'More than 35 days remaining',
     cardClassName:
-      'border-indicator-normal-bg bg-indicator-normal-bg text-indicator-normal-text',
+      'border-indicator-normal-border bg-indicator-normal-bg text-indicator-normal-text',
     badgeClassName:
       'bg-indicator-normal-bg text-indicator-normal-text',
   },
@@ -36,7 +36,7 @@ export const INDICATOR_META: readonly IndicatorMeta[] = [
     label: 'Overdue',
     description: 'Past the effective finish date',
     cardClassName:
-      'border-indicator-overdue-bg bg-indicator-overdue-bg text-indicator-overdue-text',
+      'border-indicator-overdue-border bg-indicator-overdue-bg text-indicator-overdue-text',
     badgeClassName:
       'bg-indicator-overdue-bg text-indicator-overdue-text',
   },
@@ -45,7 +45,7 @@ export const INDICATOR_META: readonly IndicatorMeta[] = [
     label: 'Paused',
     description: 'Suspended or postponed',
     cardClassName:
-      'border-indicator-paused-bg bg-indicator-paused-bg text-indicator-paused-text',
+      'border-indicator-paused-border bg-indicator-paused-bg text-indicator-paused-text',
     badgeClassName:
       'bg-indicator-paused-bg text-indicator-paused-text',
   },
@@ -54,7 +54,7 @@ export const INDICATOR_META: readonly IndicatorMeta[] = [
     label: 'Completed',
     description: 'Finished at 100% progress',
     cardClassName:
-      'border-indicator-completed-bg bg-indicator-completed-bg text-indicator-completed-text',
+      'border-indicator-completed-border bg-indicator-completed-bg text-indicator-completed-text',
     badgeClassName:
       'bg-indicator-completed-bg text-indicator-completed-text',
   },
@@ -63,7 +63,7 @@ export const INDICATOR_META: readonly IndicatorMeta[] = [
     label: 'Terminated',
     description: 'Closed through an admin action',
     cardClassName:
-      'border-indicator-terminated-bg bg-indicator-terminated-bg text-indicator-terminated-text',
+      'border-indicator-terminated-border bg-indicator-terminated-bg text-indicator-terminated-text',
     badgeClassName:
       'bg-indicator-terminated-bg text-indicator-terminated-text',
   },

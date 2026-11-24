@@ -10,7 +10,7 @@ import { IndicatorCard } from '../components/IndicatorCard'
 import { SummaryCard } from '../components/SummaryCard'
 import { WatchlistTable } from '../components/WatchlistTable'
 import { useDashboard } from '../hooks/useDashboard'
-import { INDICATOR_META } from '../indicatorMeta'
+import { INDICATOR_META } from '../../shared/indicatorMeta'
 
 export function DashboardPage() {
   const { data, isPending, isError, error, refetch } = useDashboard()
