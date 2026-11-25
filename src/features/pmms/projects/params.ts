@@ -67,6 +67,11 @@ export function toProjectListParams(
     params.indicator = indicator as ProjectListParams['indicator']
   }
 
+  const assignedPeId = positiveInteger(filters.assigned_pe_id)
+  if (assignedPeId !== undefined) {
+    params.assigned_pe_id = assignedPeId
+  }
+
   if (isProjectSort(filters.sort)) {
     params.sort = filters.sort
   }

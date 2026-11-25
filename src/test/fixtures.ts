@@ -7,6 +7,10 @@ import type {
   Role,
 } from '@/shared/types/api'
 import type { DashboardResponse } from '@/features/pmms/dashboard/types'
+import type {
+  ProjectHistoryEntry,
+  ProjectUpdateEntry,
+} from '@/features/pmms/projects/types'
 
 let permissionId = 1
 
@@ -140,6 +144,39 @@ export function makeProject(overrides: Partial<Project> = {}): Project {
     created_at: '2026-01-01T00:00:00+08:00',
     updated_at: '2026-01-01T00:00:00+08:00',
     deleted_at: null,
+    ...overrides,
+  }
+}
+
+export function makeProjectHistoryEntry(
+  overrides: Partial<ProjectHistoryEntry> = {},
+): ProjectHistoryEntry {
+  return {
+    id: 1,
+    change_set_id: 'change-set-1',
+    action: 'updated',
+    field_name: 'project_name',
+    previous_value: 'Old project name',
+    new_value: 'New project name',
+    reason: null,
+    actor: { id: 2, full_name: 'Demo Project Engineer' },
+    created_at: '2026-11-24T09:00:00+08:00',
+    ...overrides,
+  }
+}
+
+export function makeProjectUpdateEntry(
+  overrides: Partial<ProjectUpdateEntry> = {},
+): ProjectUpdateEntry {
+  return {
+    id: 1,
+    report_date: '2026-11-24',
+    previous_progress: 40,
+    progress_percentage: 60,
+    accomplishment: 'Completed the base course.',
+    remarks: null,
+    reporter: { id: 2, full_name: 'Demo Project Engineer' },
+    created_at: '2026-11-24T09:30:00+08:00',
     ...overrides,
   }
 }

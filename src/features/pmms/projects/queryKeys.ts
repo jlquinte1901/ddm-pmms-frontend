@@ -5,6 +5,8 @@ export const projectKeys = {
   list: (params: ProjectListParams) =>
     [...projectKeys.all, 'list', params] as const,
   categories: () => [...projectKeys.all, 'categories'] as const,
+  assignableEngineers: () =>
+    [...projectKeys.all, 'assignable-engineers'] as const,
   detail: (projectId: number) =>
     [...projectKeys.all, 'detail', projectId] as const,
   history: (projectId: number, page: number) =>

@@ -2,7 +2,7 @@ import type { FormEvent } from 'react'
 import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import type { ProjectCategory } from '@/shared/types/api'
+import type { ProjectCategory, UserSummary } from '@/shared/types/api'
 import type { UrlFilterValue, UrlFilters } from '@/shared/hooks/useUrlFilters'
 import { INDICATOR_META } from '../../shared/indicatorMeta'
 import { PROJECT_STATUS_LABELS, PROJECT_STATUSES } from '../types'
@@ -19,6 +19,7 @@ function yearOptions(): number[] {
 type ProjectFiltersProps = {
   filters: UrlFilters
   categories: ProjectCategory[]
+  engineers: UserSummary[]
   hasFilters: boolean
   onChange: (values: Record<string, UrlFilterValue>) => void
   onClear: () => void
@@ -27,6 +28,7 @@ type ProjectFiltersProps = {
 export function ProjectFilters({
   filters,
   categories,
+  engineers,
   hasFilters,
   onChange,
   onClear,
@@ -162,6 +164,32 @@ export function ProjectFilters({
               ))}
             </select>
           </div>
+
+          {engineers.length > 0 ? (
+            <div className="space-y-1">
+              <label
+                htmlFor="project-assigned-pe"
+                className="block text-xs font-medium text-muted-foreground"
+              >
+                Assigned PE
+              </label>
+              <select
+                id="project-assigned-pe"
+                className={selectClassName}
+                value={filters.assigned_pe_id ?? ''}
+                onChange={(event) =>
+                  onChange({ assigned_pe_id: event.target.value || null })
+                }
+              >
+                <option value="">All Project Engineers</option>
+                {engineers.map((engineer) => (
+                  <option key={engineer.id} value={engineer.id}>
+                    {engineer.full_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
 
           {hasFilters ? (
             <Button type="button" variant="ghost" onClick={onClear}>

@@ -6,8 +6,10 @@ import {
   makePaginated,
   makeProject,
   makeProjectCategory,
+  makeUser,
 } from '@/test/fixtures'
 import {
+  assignableEngineersHandler,
   projectCategoriesHandler,
   projectsErrorHandler,
   projectsHandler,
@@ -145,6 +147,71 @@ describe('ProjectsPage', () => {
       ).not.toBeInTheDocument()
     })
     expect(screen.getByLabelText('Search projects')).toHaveValue('')
+  })
+
+  it('shows the register link only with the create permission', async () => {
+    server.use(
+      projectsHandler(makePaginated([makeProject()])),
+      projectCategoriesHandler(categories),
+    )
+
+    renderWithProviders(<ProjectsPage />, {
+      route: '/pmms/projects',
+      user: makeUser({ permissions: ['pmms.projects.create'] }),
+    })
+
+    expect(
+      await screen.findByRole('link', { name: 'Register project' }),
+    ).toHaveAttribute('href', '/pmms/projects/new')
+  })
+
+  it('shows the assigned-PE filter and sends the selected engineer', async () => {
+    const user = userEvent.setup()
+    const captured: { url: URL | null } = { url: null }
+
+    server.use(
+      http.get('*/api/v1/pmms/projects', ({ request }) => {
+        captured.url = new URL(request.url)
+
+        return HttpResponse.json(makePaginated([makeProject()]))
+      }),
+      projectCategoriesHandler(categories),
+      assignableEngineersHandler([
+        { id: 4, full_name: 'Demo Project Engineer' },
+      ]),
+    )
+
+    renderWithProviders(<ProjectsPage />, {
+      route: '/pmms/projects',
+      user: makeUser({
+        permissions: ['pmms.projects.view-all', 'pmms.projects.administer'],
+      }),
+    })
+
+    await screen.findByText('Sample Road Concreting')
+    await user.selectOptions(screen.getByLabelText('Assigned PE'), '4')
+
+    await waitFor(() => {
+      expect(captured.url?.searchParams.get('assigned_pe_id')).toBe('4')
+    })
+  })
+
+  it('hides the register link without the create permission', async () => {
+    server.use(
+      projectsHandler(makePaginated([makeProject()])),
+      projectCategoriesHandler(categories),
+    )
+
+    renderWithProviders(<ProjectsPage />, {
+      route: '/pmms/projects',
+      user: makeUser({ permissions: ['pmms.projects.view-own'] }),
+    })
+
+    await screen.findByText('Sample Road Concreting')
+
+    expect(
+      screen.queryByRole('link', { name: 'Register project' }),
+    ).not.toBeInTheDocument()
   })
 
   it('shows an error state when the list is forbidden', async () => {
