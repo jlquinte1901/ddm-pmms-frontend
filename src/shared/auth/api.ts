@@ -10,6 +10,12 @@ export type LoginPayload = {
   device_name?: string
 }
 
+export type ChangePasswordPayload = {
+  current_password: string
+  password: string
+  password_confirmation: string
+}
+
 export async function fetchCurrentUser(): Promise<AuthUser> {
   const { data } = await apiClient.get<{ data: AuthUser }>('/auth/me')
 
@@ -29,4 +35,10 @@ export async function loginRequest(
 
 export async function logoutRequest(): Promise<void> {
   await apiClient.post('/auth/logout')
+}
+
+export async function changePasswordRequest(
+  payload: ChangePasswordPayload,
+): Promise<void> {
+  await apiClient.post('/auth/change-password', payload)
 }

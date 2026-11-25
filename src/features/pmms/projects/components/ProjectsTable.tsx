@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from 'cn'
@@ -133,9 +134,12 @@ export function ProjectsTable({
             return (
               <tr key={project.id} className="align-top">
                 <td className="px-4 py-3">
-                  <p className="font-medium text-foreground">
+                  <Link
+                    to={`/pmms/projects/${project.id}`}
+                    className="font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
                     {project.project_name}
-                  </p>
+                  </Link>
                   <p className="text-xs text-muted-foreground">
                     {project.contract_number ?? 'No contract number'}
                   </p>

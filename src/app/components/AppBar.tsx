@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom'
 import {
   Building2,
   ChevronDown,
+  KeyRound,
   LogOut,
   Menu,
   UserRound,
@@ -24,6 +26,7 @@ type AppBarProps = {
 
 export function AppBar({ user, onOpenNav }: AppBarProps) {
   const logout = useLogoutMutation()
+  const navigate = useNavigate()
   const roleLabel = user?.role?.label ?? 'Signed in'
 
   return (
@@ -81,6 +84,13 @@ export function AppBar({ user, onOpenNav }: AppBarProps) {
                   {roleLabel}
                 </span>
               </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={() => navigate('/account/password')}
+              >
+                <KeyRound aria-hidden="true" />
+                Change password
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={logout.isPending}

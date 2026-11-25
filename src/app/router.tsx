@@ -3,8 +3,12 @@ import { PERMISSIONS } from '@/shared/lib/permissions'
 import { RequireAuth } from '@/shared/auth/RequireAuth'
 import { RequireGuest } from '@/shared/auth/RequireGuest'
 import { RequirePermission } from '@/shared/auth/RequirePermission'
+import { ChangePasswordPage } from '@/features/auth/pages/ChangePasswordPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { DashboardPage } from '@/features/pmms/dashboard/pages/DashboardPage'
+import { NewProjectPage } from '@/features/pmms/projects/pages/NewProjectPage'
+import { EditProjectPage } from '@/features/pmms/projects/pages/EditProjectPage'
+import { ProjectDetailPage } from '@/features/pmms/projects/pages/ProjectDetailPage'
 import { ProjectsPage } from '@/features/pmms/projects/pages/ProjectsPage'
 import { AppShell } from './layouts/AppShell'
 import { LandingRedirect } from './pages/LandingRedirect'
@@ -52,6 +56,10 @@ export const router = createBrowserRouter([
             element: <NoAccessPage />,
           },
           {
+            path: 'account/password',
+            element: <ChangePasswordPage />,
+          },
+          {
             path: 'pmms/dashboard',
             element: (
               <RequirePermission permission={PERMISSIONS.PMMS_DASHBOARD_VIEW}>
@@ -64,6 +72,30 @@ export const router = createBrowserRouter([
             element: (
               <RequirePermission anyOf={PROJECT_VIEW_PERMISSIONS}>
                 <ProjectsPage />
+              </RequirePermission>
+            ),
+          },
+          {
+            path: 'pmms/projects/new',
+            element: (
+              <RequirePermission permission={PERMISSIONS.PMMS_PROJECTS_CREATE}>
+                <NewProjectPage />
+              </RequirePermission>
+            ),
+          },
+          {
+            path: 'pmms/projects/:projectId',
+            element: (
+              <RequirePermission anyOf={PROJECT_VIEW_PERMISSIONS}>
+                <ProjectDetailPage />
+              </RequirePermission>
+            ),
+          },
+          {
+            path: 'pmms/projects/:projectId/edit',
+            element: (
+              <RequirePermission permission={PERMISSIONS.PMMS_PROJECTS_MANAGE_OWN}>
+                <EditProjectPage />
               </RequirePermission>
             ),
           },

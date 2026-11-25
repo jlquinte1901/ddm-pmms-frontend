@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { Plus } from 'lucide-react'
 import { PageHeader } from '@/shared/components/PageHeader'
 import { Pagination } from '@/shared/components/Pagination'
 import {
@@ -6,9 +8,13 @@ import {
   LoadingState,
 } from '@/shared/components/states'
 import { Button } from '@/components/ui/button'
+import { Can } from '@/shared/auth/Can'
+import { usePermission } from '@/shared/auth/usePermission'
 import { useUrlFilters } from '@/shared/hooks/useUrlFilters'
+import { PERMISSIONS } from '@/shared/lib/permissions'
 import { ProjectFilters } from '../components/ProjectFilters'
 import { ProjectsTable } from '../components/ProjectsTable'
+import { useAssignableEngineers } from '../hooks/useAssignableEngineers'
 import { useProjectCategories } from '../hooks/useProjectCategories'
 import { useProjects } from '../hooks/useProjects'
 import {
@@ -32,6 +38,9 @@ export function ProjectsPage() {
   const params = toProjectListParams(filters, page, perPage)
   const { data, isPending, isError, error, refetch } = useProjects(params)
   const categoriesQuery = useProjectCategories()
+  const canAdminister = usePermission(PERMISSIONS.PMMS_PROJECTS_ADMINISTER)
+  const engineersQuery = useAssignableEngineers(canAdminister)
+  const engineers = canAdminister ? (engineersQuery.data ?? []) : []
 
   const sort = isProjectSort(filters.sort) ? filters.sort : null
   const direction = isSortDirection(filters.direction)
@@ -56,18 +65,29 @@ export function ProjectsPage() {
         title="Projects"
         description="The project registry, filtered and paginated on the server."
         actions={
-          data ? (
-            <p className="text-xs text-muted-foreground">
-              {data.meta.total.toLocaleString('en-US')}{' '}
-              {data.meta.total === 1 ? 'project' : 'projects'} in scope
-            </p>
-          ) : null
+          <>
+            {data ? (
+              <p className="text-xs text-muted-foreground">
+                {data.meta.total.toLocaleString('en-US')}{' '}
+                {data.meta.total === 1 ? 'project' : 'projects'} in scope
+              </p>
+            ) : null}
+            <Can permission={PERMISSIONS.PMMS_PROJECTS_CREATE}>
+              <Button asChild>
+                <Link to="/pmms/projects/new">
+                  <Plus aria-hidden="true" />
+                  Register project
+                </Link>
+              </Button>
+            </Can>
+          </>
         }
       />
 
       <ProjectFilters
         filters={filters}
         categories={categoriesQuery.data?.data ?? []}
+        engineers={engineers}
         hasFilters={hasFilters}
         onChange={setFilters}
         onClear={clearFilters}

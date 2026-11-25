@@ -51,6 +51,7 @@ export type ProjectListParams = {
   project_category_id?: number
   status?: ProjectStatus
   indicator?: Indicator
+  assigned_pe_id?: number
   sort?: ProjectSort
   direction?: SortDirection
   page?: number
@@ -79,6 +80,60 @@ export type ProjectPayload = {
   planned_finish_date: string
   contractor: string | null
   remarks: string | null
+}
+
+/**
+ * Body accepted by PUT /api/v1/pmms/projects/{id}. All fields are optional on
+ * the backend; the edit form always sends the full set of current values.
+ */
+export type ProjectUpdatePayload = ProjectPayload & {
+  actual_start_date?: string | null
+  actual_finish_date?: string | null
+}
+
+export type StartProjectPayload = {
+  remarks?: string | null
+}
+
+export type ProgressReportPayload = {
+  report_date: string
+  progress_percentage: number
+  accomplishment?: string | null
+  remarks?: string | null
+}
+
+export type PauseProjectPayload = {
+  status: 'suspended' | 'postponed'
+  reason: string
+}
+
+export type ResumeProjectPayload = {
+  revised_finish_date: string
+  remarks: string
+}
+
+export type TerminateProjectPayload = {
+  reason: string
+}
+
+export type ReopenProjectPayload = {
+  reason: string
+  progress_percentage: number
+}
+
+export type ReassignProjectPayload = {
+  assigned_pe_id: number
+  reason: string
+}
+
+export type DeleteProjectPayload = {
+  reason: string
+}
+
+export type CorrectPlannedDatesPayload = {
+  planned_start_date: string
+  planned_finish_date: string
+  reason: string
 }
 
 /**
