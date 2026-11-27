@@ -6,6 +6,11 @@ import { RequirePermission } from '@/shared/auth/RequirePermission'
 import { ChangePasswordPage } from '@/features/auth/pages/ChangePasswordPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { DashboardPage } from '@/features/pmms/dashboard/pages/DashboardPage'
+import { DocumentDetailPage } from '@/features/ddm/documents/pages/DocumentDetailPage'
+import { DocumentsPage } from '@/features/ddm/documents/pages/DocumentsPage'
+import { NewDocumentPage } from '@/features/ddm/documents/pages/NewDocumentPage'
+import { DownloadRequestsPage } from '@/features/ddm/downloadRequests/pages/DownloadRequestsPage'
+import { CategoriesPage } from '@/features/ddm/categories/pages/CategoriesPage'
 import { NewProjectPage } from '@/features/pmms/projects/pages/NewProjectPage'
 import { EditProjectPage } from '@/features/pmms/projects/pages/EditProjectPage'
 import { ProjectDetailPage } from '@/features/pmms/projects/pages/ProjectDetailPage'
@@ -114,10 +119,23 @@ export const router = createBrowserRouter([
             path: 'ddm/documents',
             element: (
               <RequirePermission permission={PERMISSIONS.DDM_DOCUMENTS_VIEW}>
-                <PlaceholderPage
-                  title="Documents"
-                  description="The departmental document repository and search."
-                />
+                <DocumentsPage />
+              </RequirePermission>
+            ),
+          },
+          {
+            path: 'ddm/documents/new',
+            element: (
+              <RequirePermission permission={PERMISSIONS.DDM_DOCUMENTS_UPLOAD}>
+                <NewDocumentPage />
+              </RequirePermission>
+            ),
+          },
+          {
+            path: 'ddm/documents/:documentId',
+            element: (
+              <RequirePermission permission={PERMISSIONS.DDM_DOCUMENTS_VIEW}>
+                <DocumentDetailPage />
               </RequirePermission>
             ),
           },
@@ -125,10 +143,7 @@ export const router = createBrowserRouter([
             path: 'ddm/categories',
             element: (
               <RequirePermission permission={PERMISSIONS.DDM_CATEGORIES_MANAGE}>
-                <PlaceholderPage
-                  title="Document categories"
-                  description="Document category management and default access levels."
-                />
+                <CategoriesPage />
               </RequirePermission>
             ),
           },
@@ -136,10 +151,7 @@ export const router = createBrowserRouter([
             path: 'ddm/download-requests',
             element: (
               <RequirePermission anyOf={DOWNLOAD_REQUEST_PERMISSIONS}>
-                <PlaceholderPage
-                  title="Download requests"
-                  description="Your requests and the approval queue."
-                />
+                <DownloadRequestsPage />
               </RequirePermission>
             ),
           },

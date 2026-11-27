@@ -1,5 +1,9 @@
 import type {
   AuthUser,
+  Document,
+  DocumentCategory,
+  DocumentDownloadRequest,
+  DocumentVersion,
   Paginated,
   Permission,
   Project,
@@ -102,6 +106,101 @@ export function makeProjectCategory(
     is_active: true,
     created_at: '2026-01-01T00:00:00+08:00',
     updated_at: '2026-01-01T00:00:00+08:00',
+    ...overrides,
+  }
+}
+
+export function makeDocumentCategory(
+  overrides: Partial<DocumentCategory> = {},
+): DocumentCategory {
+  return {
+    id: 1,
+    name: 'Budget Records',
+    scope: 'ddm',
+    default_access_level: 'restricted',
+    is_active: true,
+    documents_count: 1,
+    created_at: '2026-01-01T00:00:00+08:00',
+    updated_at: '2026-01-01T00:00:00+08:00',
+    ...overrides,
+  }
+}
+
+export function makeDocumentVersion(
+  overrides: Partial<DocumentVersion> = {},
+): DocumentVersion {
+  return {
+    id: 1,
+    document_id: 1,
+    version_number: 1,
+    original_name: 'annual-budget.pdf',
+    mime_type: 'application/pdf',
+    file_size: 2048,
+    checksum_sha256: 'a'.repeat(64),
+    change_note: null,
+    uploaded_by: 2,
+    uploader: { id: 2, full_name: 'Data Management' },
+    created_at: '2026-11-01T09:00:00+08:00',
+    ...overrides,
+  }
+}
+
+export function makeDocument(overrides: Partial<Document> = {}): Document {
+  return {
+    id: 1,
+    category: makeDocumentCategory(),
+    title: 'Annual Budget Report',
+    reference_no: 'BUD-2026-001',
+    document_date: '2026-01-15',
+    description: 'Annual budget records.',
+    remarks: null,
+    access_level: null,
+    effective_access_level: 'restricted',
+    state: 'active',
+    is_archived: false,
+    archived_at: null,
+    archived_by: null,
+    created_by: 2,
+    creator: { id: 2, full_name: 'Data Management' },
+    latest_version_number: 1,
+    latest_version: makeDocumentVersion(),
+    versions: [makeDocumentVersion()],
+    can_download: false,
+    created_at: '2026-11-01T09:00:00+08:00',
+    updated_at: '2026-11-01T09:00:00+08:00',
+    deleted_at: null,
+    ...overrides,
+  }
+}
+
+export function makeDownloadRequest(
+  overrides: Partial<DocumentDownloadRequest> = {},
+): DocumentDownloadRequest {
+  return {
+    id: 1,
+    document_id: 7,
+    document: {
+      id: 7,
+      title: 'Annual Budget Report',
+      reference_no: 'BUD-2026-001',
+      effective_access_level: 'restricted',
+      state: 'active',
+      category: makeDocumentCategory(),
+    },
+    requested_by: 5,
+    requester: { id: 5, full_name: 'Viewer User' },
+    decided_by: null,
+    decider: null,
+    status: 'pending',
+    effective_status: 'pending',
+    is_lapsed: false,
+    is_expired: false,
+    reason: 'Required for the annual review.',
+    decision_note: null,
+    decided_at: null,
+    expires_at: null,
+    created_at: '2026-11-26T09:00:00+08:00',
+    updated_at: '2026-11-26T09:00:00+08:00',
     ...overrides,
   }
 }
