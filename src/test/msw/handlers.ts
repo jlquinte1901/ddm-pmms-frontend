@@ -1,6 +1,10 @@
 import { http, HttpResponse } from 'msw'
 import type {
   AuthUser,
+  Document,
+  DocumentCategory,
+  DocumentDownloadRequest,
+  DocumentVersion,
   Paginated,
   Project,
   ProjectCategory,
@@ -92,6 +96,141 @@ export function projectsErrorHandler(
 ) {
   return http.get('*/api/v1/pmms/projects', () =>
     HttpResponse.json({ message: body.message, code: body.code }, { status }),
+  )
+}
+
+export function documentsHandler(documents: Paginated<Document>) {
+  return http.get('*/api/v1/ddm/documents', () => HttpResponse.json(documents))
+}
+
+export function documentsErrorHandler(
+  status: number,
+  body: { message: string; code: string },
+) {
+  return http.get('*/api/v1/ddm/documents', () =>
+    HttpResponse.json({ message: body.message, code: body.code }, { status }),
+  )
+}
+
+export function documentCategoriesHandler(
+  categories: Paginated<DocumentCategory>,
+) {
+  return http.get('*/api/v1/ddm/categories', () =>
+    HttpResponse.json(categories),
+  )
+}
+
+export function categoryCreateHandler(category: DocumentCategory) {
+  return http.post('*/api/v1/ddm/categories', () =>
+    HttpResponse.json({ data: category }, { status: 201 }),
+  )
+}
+
+export function categoryCreateErrorHandler(
+  status: number,
+  body: { message: string; code: string; errors?: Record<string, string[]> },
+) {
+  return http.post('*/api/v1/ddm/categories', () =>
+    HttpResponse.json(
+      { message: body.message, code: body.code, errors: body.errors ?? {} },
+      { status },
+    ),
+  )
+}
+
+export function categoryUpdateHandler(category: DocumentCategory) {
+  return http.patch('*/api/v1/ddm/categories/:categoryId', () =>
+    HttpResponse.json({ data: category }),
+  )
+}
+
+export function documentDetailHandler(document: Document) {
+  return http.get('*/api/v1/ddm/documents/:documentId', () =>
+    HttpResponse.json({ data: document }),
+  )
+}
+
+export function documentDetailErrorHandler(
+  status: number,
+  body: { message: string; code: string },
+) {
+  return http.get('*/api/v1/ddm/documents/:documentId', () =>
+    HttpResponse.json({ message: body.message, code: body.code }, { status }),
+  )
+}
+
+export function documentCreateHandler(document: Document) {
+  return http.post('*/api/v1/ddm/documents', () =>
+    HttpResponse.json({ data: document }, { status: 201 }),
+  )
+}
+
+export function documentCreateErrorHandler(
+  status: number,
+  body: { message: string; code: string; errors?: Record<string, string[]> },
+) {
+  return http.post('*/api/v1/ddm/documents', () =>
+    HttpResponse.json(
+      { message: body.message, code: body.code, errors: body.errors ?? {} },
+      { status },
+    ),
+  )
+}
+
+export function documentArchiveHandler(document: Document) {
+  return http.post('*/api/v1/ddm/documents/:documentId/archive', () =>
+    HttpResponse.json({ data: { ...document, is_archived: true } }),
+  )
+}
+
+export function documentUnarchiveHandler(document: Document) {
+  return http.post('*/api/v1/ddm/documents/:documentId/unarchive', () =>
+    HttpResponse.json({ data: { ...document, is_archived: false } }),
+  )
+}
+
+export function documentDeleteHandler() {
+  return http.delete('*/api/v1/ddm/documents/:documentId', () =>
+    new HttpResponse(null, { status: 204 }),
+  )
+}
+
+export function documentAddVersionHandler(version: DocumentVersion) {
+  return http.post('*/api/v1/ddm/documents/:documentId/versions', () =>
+    HttpResponse.json({ data: version }, { status: 201 }),
+  )
+}
+
+export function downloadRequestsHandler(
+  requests: Paginated<DocumentDownloadRequest>,
+) {
+  return http.get('*/api/v1/ddm/download-requests', () =>
+    HttpResponse.json(requests),
+  )
+}
+
+export function downloadRequestsErrorHandler(
+  status: number,
+  body: { message: string; code: string },
+) {
+  return http.get('*/api/v1/ddm/download-requests', () =>
+    HttpResponse.json({ message: body.message, code: body.code }, { status }),
+  )
+}
+
+export function downloadRequestApproveHandler(
+  request: DocumentDownloadRequest,
+) {
+  return http.post('*/api/v1/ddm/download-requests/:requestId/approve', () =>
+    HttpResponse.json({ data: request }),
+  )
+}
+
+export function downloadRequestDenyHandler(
+  request: DocumentDownloadRequest,
+) {
+  return http.post('*/api/v1/ddm/download-requests/:requestId/deny', () =>
+    HttpResponse.json({ data: request }),
   )
 }
 

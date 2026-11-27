@@ -161,3 +161,100 @@ export type Project = {
   updated_at: string | null
   deleted_at: string | null
 }
+
+export type DocumentState = 'active' | 'archived' | 'deleted'
+
+/**
+ * Mirrors App\Http\Resources\DocumentCategoryResource. The /ddm/categories
+ * endpoint only returns DDM-scoped categories.
+ */
+export type DocumentCategory = {
+  id: number
+  name: string
+  scope: 'ddm' | 'pmms'
+  default_access_level: AccessLevel
+  is_active: boolean
+  documents_count?: number
+  created_at: string | null
+  updated_at: string | null
+}
+
+/**
+ * Mirrors App\Http\Resources\DocumentVersionResource.
+ */
+export type DocumentVersion = {
+  id: number
+  document_id: number
+  version_number: number
+  original_name: string
+  mime_type: string
+  file_size: number
+  checksum_sha256: string
+  change_note: string | null
+  uploaded_by: number
+  uploader?: UserSummary | null
+  created_at: string | null
+}
+
+/**
+ * Mirrors App\Http\Resources\DocumentResource.
+ */
+export type Document = {
+  id: number
+  category?: DocumentCategory | null
+  title: string
+  reference_no: string | null
+  document_date: string | null
+  description: string | null
+  remarks: string | null
+  access_level: AccessLevel | null
+  effective_access_level: AccessLevel
+  state: DocumentState
+  is_archived: boolean
+  archived_at: string | null
+  archived_by: number | null
+  created_by: number
+  creator?: UserSummary | null
+  latest_version_number: number
+  latest_version?: DocumentVersion | null
+  versions?: DocumentVersion[]
+  can_download: boolean
+  created_at: string | null
+  updated_at: string | null
+  deleted_at: string | null
+}
+
+/**
+ * Mirrors App\Http\Resources\DocumentSummaryResource.
+ */
+export type DocumentSummary = {
+  id: number
+  title: string
+  reference_no: string | null
+  effective_access_level: AccessLevel
+  state: DocumentState
+  category?: DocumentCategory | null
+}
+
+/**
+ * Mirrors App\Http\Resources\DocumentDownloadRequestResource.
+ */
+export type DocumentDownloadRequest = {
+  id: number
+  document_id: number
+  document?: DocumentSummary | null
+  requested_by: number
+  requester?: UserSummary | null
+  decided_by: number | null
+  decider?: UserSummary | null
+  status: RequestStatus
+  effective_status: EffectiveRequestStatus
+  is_lapsed: boolean
+  is_expired: boolean
+  reason: string
+  decision_note: string | null
+  decided_at: string | null
+  expires_at: string | null
+  created_at: string | null
+  updated_at: string | null
+}
